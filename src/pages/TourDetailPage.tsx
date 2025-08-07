@@ -148,11 +148,11 @@ const TourDetailPage: React.FC<TourDetailPageProps> = ({ tour, onBack }) => {
         {/* Image Gallery */}
         <div className="mb-8">
           <div className="relative">
-            <div className="aspect-w-16 aspect-h-9 lg:aspect-h-6 rounded-2xl overflow-hidden bg-gray-200">
+            <div className="relative w-full h-64 sm:h-80 lg:h-96 rounded-2xl overflow-hidden bg-gray-200">
               <img
                 src={tour.images[activeImageIndex]}
                 alt={tour.title}
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = 'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=800';
@@ -450,82 +450,85 @@ const TourDetailPage: React.FC<TourDetailPageProps> = ({ tour, onBack }) => {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Price and Join */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border sticky top-24">
-              <div className="text-center mb-6">
-                <p className="text-3xl font-bold text-gray-900 mb-1">
-                  {tour.price.toLocaleString()} ₽
-                </p>
-                <p className="text-gray-600">за человека</p>
-              </div>
-              
-              <div className="space-y-4 mb-6">
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="text-gray-600">Свободных мест:</span>
-                  <span className="font-semibold text-green-600">
-                    {tour.maxParticipants - tour.currentParticipants}
-                  </span>
+            {/* Sticky Sidebar Container */}
+            <div className="sticky top-24 space-y-6">
+              {/* Price and Join */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border">
+                <div className="text-center mb-6">
+                  <p className="text-3xl font-bold text-gray-900 mb-1">
+                    {tour.price.toLocaleString()} ₽
+                  </p>
+                  <p className="text-gray-600">за человека</p>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="text-gray-600">Длительность:</span>
-                  <span className="font-semibold">{tourDuration} дней</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="text-gray-600">Начало тура:</span>
-                  <span className="font-semibold">
-                    {new Date(tour.startDate).toLocaleDateString('ru-RU')}
-                  </span>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <button
-                  onClick={handleJoinTour}
-                  disabled={tour.currentParticipants >= tour.maxParticipants}
-                  className="w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-                >
-                  {tour.currentParticipants >= tour.maxParticipants ? 'Мест нет' : 'Присоединиться к туру'}
-                </button>
                 
-                <button className="w-full border border-gray-300 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors">
-                  Написать организатору
-                </button>
-              </div>
-            </div>
+                <div className="space-y-4 mb-6">
+                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <span className="text-gray-600">Свободных мест:</span>
+                    <span className="font-semibold text-green-600">
+                      {tour.maxParticipants - tour.currentParticipants}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <span className="text-gray-600">Длительность:</span>
+                    <span className="font-semibold">{tourDuration} дней</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <span className="text-gray-600">Начало тура:</span>
+                    <span className="font-semibold">
+                      {new Date(tour.startDate).toLocaleDateString('ru-RU')}
+                    </span>
+                  </div>
+                </div>
 
-            {/* Organizer */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Организатор</h3>
-              <div className="flex items-center mb-4">
-                <img
-                  src={tour.organizer.avatar}
-                  alt={tour.organizer.name}
-                  className="h-16 w-16 rounded-full object-cover mr-4"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center mb-1">
-                    <h4 className="font-semibold text-gray-900">{tour.organizer.name}</h4>
-                    {tour.organizer.verified && (
-                      <Shield className="h-4 w-4 text-blue-500 ml-2" />
-                    )}
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600 mb-1">
-                    <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                    <span className="font-medium">{tour.organizer.rating}</span>
-                    <span className="mx-1">•</span>
-                    <span>{tour.organizer.reviewsCount} отзывов</span>
-                  </div>
-                  <p className="text-sm text-gray-600">{tour.organizer.location}</p>
+                <div className="space-y-3">
+                  <button
+                    onClick={handleJoinTour}
+                    disabled={tour.currentParticipants >= tour.maxParticipants}
+                    className="w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    {tour.currentParticipants >= tour.maxParticipants ? 'Мест нет' : 'Присоединиться к туру'}
+                  </button>
+                  
+                  <button className="w-full border border-gray-300 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+                    Написать организатору
+                  </button>
                 </div>
               </div>
-              
-              {tour.organizer.bio && (
-                <p className="text-gray-700 text-sm mb-4 leading-relaxed">{tour.organizer.bio}</p>
-              )}
-              
-              <button className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-                Посмотреть профиль
-              </button>
+
+              {/* Organizer */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Организатор</h3>
+                <div className="flex items-center mb-4">
+                  <img
+                    src={tour.organizer.avatar}
+                    alt={tour.organizer.name}
+                    className="h-16 w-16 rounded-full object-cover mr-4"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center mb-1">
+                      <h4 className="font-semibold text-gray-900">{tour.organizer.name}</h4>
+                      {tour.organizer.verified && (
+                        <Shield className="h-4 w-4 text-blue-500 ml-2" />
+                      )}
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600 mb-1">
+                      <Star className="h-4 w-4 text-yellow-400 mr-1" />
+                      <span className="font-medium">{tour.organizer.rating}</span>
+                      <span className="mx-1">•</span>
+                      <span>{tour.organizer.reviewsCount} отзывов</span>
+                    </div>
+                    <p className="text-sm text-gray-600">{tour.organizer.location}</p>
+                  </div>
+                </div>
+                
+                {tour.organizer.bio && (
+                  <p className="text-gray-700 text-sm mb-4 leading-relaxed">{tour.organizer.bio}</p>
+                )}
+                
+                <button className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                  Посмотреть профиль
+                </button>
+              </div>
             </div>
           </div>
         </div>
